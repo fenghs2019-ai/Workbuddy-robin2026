@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<poem>
+  <meta>
+    <title>棋</title>
+    <episode>34</episode>
+    <analyzed_at>2026-04-01</analyzed_at>
+  </meta>
+  <story>
+    <overview>一首关于'棋'的童话诗，描绘了9行诗意场景。</overview>
+    <genre>故事诗</genre>
+    <pov>第三人称</pov>
+  </story>
+  <characters>
+    <character>
+      <name>你（叙述对象/主角）</name>
+      <role>主角</role>
+      <traits>纯真, 善良, 充满想象力</traits>
+    </character>
+    <character>
+      <name>自然万物</name>
+      <role>环境/助力者</role>
+      <traits>有灵性, 美好</traits>
+    </character>
+  </characters>
+</poem>

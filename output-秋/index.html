@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>《03.秋》结构化分析</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 50%, #a5d6a7 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #66bb6a 0%, #43a047 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+
+        .header .subtitle {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .tabs {
+            display: flex;
+            background: #f5f5f5;
+            border-bottom: 2px solid #e0e0e0;
+            overflow-x: auto;
+        }
+
+        .tab {
+            flex: 1;
+            min-width: 120px;
+            padding: 15px 20px;
+            border: none;
+            background: transparent;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            color: #666;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            background: #eeeeee;
+            color: #43a047;
+        }
+
+        .tab.active {
+            background: white;
+            color: #43a047;
+            border-bottom: 3px solid #43a047;
+        }
+
+        .content {
+            padding: 30px;
+            min-height: 500px;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        h2 {
+            color: #2e7d32;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+            border-bottom: 2px solid #e0e0e0;
+            padding-bottom: 10px;
+        }
+
+        h3 {
+            color: #388e3c;
+            margin: 25px 0 15px 0;
+            font-size: 1.4em;
+        }
+
+        p {
+            line-height: 1.8;
+            margin-bottom: 15px;
+            color: #424242;
+        }
+
+        .poem {
+            background: #f1f8e9;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.3em;
+            line-height: 2;
+            white-space: pre-line;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+
+        th, td {
+            padding: 12px 15px;
+            text-align: left;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        th {
+            background: #66bb6a;
+            color: white;
+            font-weight: 600;
+        }
+
+        tr:hover {
+            background: #f5f5f5;
+        }
+
+        .tag {
+            display: inline-block;
+            background: #a5d6a7;
+            color: #1b5e20;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            margin: 2px;
+        }
+
+        .timeline {
+            border-left: 3px solid #66bb6a;
+            padding-left: 25px;
+            margin: 25px 0;
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .timeline-item::before {
+            content: '';
+            position: absolute;
+            left: -32px;
+            top: 5px;
+            width: 14px;
+            height: 14px;
+            background: #66bb6a;
+            border-radius: 50%;
+            border: 3px solid white;
+        }
+
+        .timeline-item h4 {
+            color: #2e7d32;
+            margin-bottom: 5px;
+        }
+
+        .character-card {
+            background: linear-gradient(135deg, #e8f5e9 0%, #c8e6c9 100%);
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+        }
+
+        .character-card h4 {
+            color: #2e7d32;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+
+        .relationship-diagram {
+            background: #f9fbe7;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 20px 0;
+            text-align: center;
+            font-size: 1.1em;
+            line-height: 2;
+        }
+
+        .value-box {
+            background: #e8f5e9;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 15px 0;
+            border-left: 4px solid #66bb6a;
+        }
+
+        .value-box h4 {
+            color: #2e7d32;
+            margin-bottom: 8px;
+        }
+
+        @media (max-width: 600px) {
+            .header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .tab {
+                padding: 12px 15px;
+                font-size: 14px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>《03.秋》结构化分析</h1>
+            <p class="subtitle">故事诗 · 31字 · 2节</p>
+        </div>
+
+        <div class="tabs">
+            <button class="tab active" onclick="showTab('original')">原文</button>
+            <button class="tab" onclick="showTab('overview')">概述</button>
+            <button class="tab" onclick="showTab('background')">背景</button>
+            <button class="tab" onclick="showTab('characters')">人物</button>
+            <button class="tab" onclick="showTab('timeline')">时间线</button>
+            <button class="tab" onclick="showTab('values')">价值观</button>
+            <button class="tab" onclick="showTab('chapters')">章节</button>
+        </div>
+
+        <div class="content">
+            <div id="original" class="tab-content active">
+                <h2>原文</h2>
+                <div class="poem">03.秋
+
+你说
+秋天一到
+你就会来
+
+叶子落了
+水凉了
+你
+在哪里</div>
+                <p style="text-align: center; color: #666; margin-top: 20px;">
+                    <small>共31字，2节</small>
+                </p>
+            </div>
+
+            <div id="overview" class="tab-content">
+                <h2>故事概述</h2>
+                <p>关于<strong>等待与失约</strong>的故事诗。叙述者记住某人承诺秋天会来，而秋天的确到了——叶子落了，水凉了——但那个人却没有出现。诗歌通过季节变化的视觉触觉线索，反衬缺席的空寂。</p>
+                
+                <h3>主题</h3>
+                <div style="margin: 15px 0;">
+                    <span class="tag">等待</span>
+                    <span class="tag">承诺</span>
+                    <span class="tag">失落</span>
+                    <span class="tag">时光流逝</span>
+                </div>
+
+                <h3>关键词</h3>
+                <p>秋天、承诺、等待、缺席、季节变化</p>
+            </div>
+
+            <div id="background" class="tab-content">
+                <h2>故事背景</h2>
+                <table>
+                    <tr>
+                        <th>项目</th>
+                        <th>内容</th>
+                    </tr>
+                    <tr>
+                        <td>场景</td>
+                        <td>秋季的自然场景，通过落叶和凉水传达季节特征</td>
+                    </tr>
+                    <tr>
+                        <td>时间</td>
+                        <td>秋天（已到）</td>
+                    </tr>
+                    <tr>
+                        <td>氛围</td>
+                        <td>静谧、失落、淡淡的忧伤</td>
+                    </tr>
+                    <tr>
+                        <td>文化语境</td>
+                        <td>秋天在中国传统中象征离别、思乡、悲愁（如"秋思"、"秋风引"），诗中用具体景象承载抽象情感</td>
+                    </tr>
+                </table>
+            </div>
+
+            <div id="characters" class="tab-content">
+                <h2>人物简介</h2>
+                
+                <div class="character-card">
+                    <h4>叙述者</h4>
+                    <p><strong>角色：</strong>等待者</p>
+                    <p><strong>特质：</strong>期待、敏感、失落</p>
+                    <p><strong>描述：</strong>记得对方的承诺，关注秋天的到来，最终发出追问</p>
+                </div>
+
+                <div class="character-card">
+                    <h4>你</h4>
+                    <p><strong>角色：</strong>承诺者/缺席者</p>
+                    <p><strong>特质：</strong>承诺未兑现、未知</p>
+                    <p><strong>描述：</strong>曾说秋天一到就会来的人，但最终没有出现</p>
+                </div>
+
+                <h3>关系图谱</h3>
+                <div class="relationship-diagram">
+                    叙述者 ──等待/期待──> 你<br>
+                    <span style="font-size: 0.9em; color: #666;">(承诺未兑现)</span>
+                </div>
+            </div>
+
+            <div id="timeline" class="tab-content">
+                <h2>故事时间线与重大事件</h2>
+                
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <h4>你曾承诺</h4>
+                        <p><strong>时间：</strong>过去 | <strong>情绪：</strong>期待</p>
+                        <p>对方说"秋天一到你就会来"</p>
+                    </div>
+
+                    <div class="timeline-item">
+                        <h4>秋天到了</h4>
+                        <p><strong>时间：</strong>现在 | <strong>情绪：</strong>观察</p>
+                        <p>叶子落了，水凉了</p>
+                    </div>
+
+                    <div class="timeline-item">
+                        <h4>你在哪里？</h4>
+                        <p><strong>时间：</strong>追问 | <strong>情绪：</strong>失落</p>
+                        <p>季节已至，人却未到</p>
+                    </div>
+                </div>
+            </div>
+
+            <div id="values" class="tab-content">
+                <h2>故事价值观</h2>
+
+                <div class="value-box">
+                    <h4>1. 承诺的重要性</h4>
+                    <p>被人记住的承诺会构成期待，未兑现则带来失落</p>
+                </div>
+
+                <div class="value-box">
+                    <h4>2. 等待的煎熬</h4>
+                    <p>通过季节变化等待一个不会来的人</p>
+                </div>
+
+                <div class="value-box">
+                    <h4>3. 自然承载情感</h4>
+                    <p>落叶和凉水既是自然现象，也是情绪载体</p>
+                </div>
+
+                <div class="value-box">
+                    <h4>4. 空寂的追问</h4>
+                    <p>"你在哪里"是对缺席的温柔诘问</p>
+                </div>
+
+                <div class="value-box">
+                    <h4>5. 时光流逝</h4>
+                    <p>秋天作为时间的具象，象征着期待落空</p>
+                </div>
+            </div>
+
+            <div id="chapters" class="tab-content">
+                <h2>章节题目与关键内容标签</h2>
+
+                <table>
+                    <tr>
+                        <th>章节</th>
+                        <th>题目</th>
+                        <th>内容</th>
+                        <th>标签</th>
+                    </tr>
+                    <tr>
+                        <td>第1节</td>
+                        <td>承诺</td>
+                        <td>你说 / 秋天一到 / 你就会来</td>
+                        <td><span class="tag">承诺</span><span class="tag">期待</span><span class="tag">时间</span></td>
+                    </tr>
+                    <tr>
+                        <td>第2节</td>
+                        <td>缺席</td>
+                        <td>叶子落了 / 水凉了 / 你 / 在哪里</td>
+                        <td><span class="tag">自然现象</span><span class="tag">失落</span><span class="tag">追问</span></td>
+                    </tr>
+                </table>
+
+                <h3>章节分析</h3>
+
+                <div class="character-card">
+                    <h4>第1节：承诺</h4>
+                    <p>以直接引语开篇，奠定承诺的基石。三行节奏递进，从"你说"到"秋天一到"再到"你就会来"，层层推进。</p>
+                </div>
+
+                <div class="character-card">
+                    <h4>第2节：缺席</h4>
+                    <p>两行景象描写（落叶、凉水）验证秋天已到，之后突然转向"你在哪里"的追问，形成强烈的失落感。</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        function showTab(tabId) {
+            // Hide all tabs
+            const contents = document.querySelectorAll('.tab-content');
+            contents.forEach(content => {
+                content.classList.remove('active');
+            });
+
+            // Deactivate all tab buttons
+            const tabs = document.querySelectorAll('.tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Show selected tab
+            document.getElementById(tabId).classList.add('active');
+
+            // Activate clicked button
+            event.target.classList.add('active');
+        }
+    </script>
+</body>
+</html>

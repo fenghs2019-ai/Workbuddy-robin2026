@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+  <meta>
+    <title>桥</title>
+    <series>森林的孩子·故事诗</series>
+    <episode>02</episode>
+    <source_file>02-桥.docx</source_file>
+    <analyzed_at>2026-03-22</analyzed_at>
+    <word_count>24</word_count>
+    <stanza_count>1</stanza_count>
+  </meta>
+
+  <original_text>
+    <stanza seq="1">
+      <line>走到桥中央</line>
+      <line>忘记了方向</line>
+      <line>是去彼岸</line>
+      <line>是回此岸</line>
+      <line>去</line>
+      <line>回</line>
+      <line>去</line>
+      <line>回</line>
+      <line>……</line>
+    </stanza>
+  </original_text>
+
+  <story_overview>
+    <summary>一个人走到桥的中央，忘记了方向——是继续前往彼岸，还是退回此岸？诗以"去/回"的交替反复，呈现内心的徘徊与犹豫，最终以省略号收尾，将答案悬置，留给读者无尽的余白。</summary>
+    <genres>
+      <genre>故事诗</genre>
+      <genre>哲理诗</genre>
+      <genre>极简诗</genre>
+    </genres>
+    <tone>静默、沉思、悬而未决</tone>
+    <pov>隐含第三人称</pov>
+  </story_overview>
+
+  <story_background>
+    <time>未明，时间被模糊处理，象征某个人生的关键节点</time>
+    <setting>桥·桥中央</setting>
+    <atmosphere>静止、悬停、空旷。桥作为连接两端的结构，在此变成了困惑的场所</atmosphere>
+    <world_notes>极简世界：只有桥、此岸、彼岸，没有其他人物与背景。空白本身即意义。</world_notes>
+  </story_background>
+
+  <characters>
+    <character>
+      <name>走路的人（主角·无名者）</name>
+      <role>主角·抉择者</role>
+      <traits>迷失，犹豫，处于中间状态，尚未做出选择</traits>
+      <arc>行走 → 抵达桥中央 → 忘记方向 → 反复犹豫 → 悬置（省略号）</arc>
+      <symbol>每一个站在人生岔路口的人</symbol>
+    </character>
+  </characters>
+
+  <character_relations/>
+
+  <timeline>
+    <event seq="1">
+      <phase>行·踏上桥</phase>
+      <lines>走到桥中央</lines>
+      <description>主角行至桥正中，动作已完成，位置已确定</description>
+      <key_images>桥中央</key_images>
+      <emotion>平静，尚未意识到困惑</emotion>
+    </event>
+    <event seq="2">
+      <phase>惑·忘记方向</phase>
+      <lines>忘记了方向</lines>
+      <description>站在中间，方向感突然消失——心理状态，不只是地理失向</description>
+      <key_images>方向·忘记</key_images>
+      <emotion>茫然、失重</emotion>
+    </event>
+    <event seq="3">
+      <phase>问·两难抉择</phase>
+      <lines>是去彼岸 / 是回此岸</lines>
+      <description>意识到两个选项：向前（彼岸）或向后（此岸）</description>
+      <key_images>彼岸·此岸</key_images>
+      <emotion>纠结、对峙</emotion>
+    </event>
+    <event seq="4">
+      <phase>徘·反复犹豫</phase>
+      <lines>去 / 回 / 去 / 回</lines>
+      <description>四字独立成行，内心反复摇摆，节奏急促又无解</description>
+      <key_images>去·回（交替）</key_images>
+      <emotion>焦虑、循环、困顿</emotion>
+    </event>
+    <event seq="5">
+      <phase>悬·省略号</phase>
+      <lines>……</lines>
+      <description>以省略号结束，答案未给出，时间停止在桥上</description>
+      <key_images>……</key_images>
+      <emotion>悬置、沉默、开放</emotion>
+    </event>
+  </timeline>
+
+  <values>
+    <value>
+      <name>选择的两难</name>
+      <evidence>去与回都是路，但站在中间时两者都同等沉重，揭示了选择的本质困境</evidence>
+    </value>
+    <value>
+      <name>迷失的勇气</name>
+      <evidence>允许自己"忘记方向"，不强行给出答案，是另一种面对不确定性的勇气</evidence>
+    </value>
+    <value>
+      <name>过程即存在</name>
+      <evidence>走到桥中央本身是行动，徘徊本身是思考，省略号是尊重内心复杂性的留白</evidence>
+    </value>
+    <value>
+      <name>此岸与彼岸的哲学</name>
+      <evidence>彼岸象征未来/理想/未知，此岸象征过去/熟悉/安全，桥是每个人必须独立面对的抉择</evidence>
+    </value>
+  </values>
+
+  <stanza_labels>
+    <stanza_label seq="1">
+      <title>桥中央的停顿</title>
+      <tags>
+        <tag>桥</tag><tag>迷失</tag><tag>彼岸</tag><tag>此岸</tag>
+        <tag>犹豫</tag><tag>选择</tag><tag>省略号</tag><tag>极简</tag>
+        <tag>悬念</tag><tag>哲理</tag>
+      </tags>
+    </stanza_label>
+  </stanza_labels>
+
+  <literary_devices>
+    <device>
+      <name>反复</name>
+      <example>"去 / 回 / 去 / 回"四字独立成行，反复出现，呈现内心的徘徊节奏</example>
+    </device>
+    <device>
+      <name>对比</name>
+      <example>"彼岸"与"此岸"构成方向与意义上的对立</example>
+    </device>
+    <device>
+      <name>省略号结尾</name>
+      <example>"……"让诗悬而未决，将解答权交给读者，制造无尽余韵</example>
+    </device>
+    <device>
+      <name>极简主义</name>
+      <example>全诗仅24字，用最少的词完成最大的哲学表达</example>
+    </device>
+    <device>
+      <name>意象聚焦</name>
+      <example>仅"桥·彼岸·此岸·去·回"，每个词都承载最大重量</example>
+    </device>
+  </literary_devices>
+</document>

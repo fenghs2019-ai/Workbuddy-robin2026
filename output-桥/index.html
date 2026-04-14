@@ -1,0 +1,388 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《桥》— 文本结构化分析</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #21262d;
+    --accent: #79c0ff;
+    --accent2: #7ee8a2;
+    --accent3: #ffa657;
+    --accent4: #f78166;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --border: #30363d;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family:'PingFang SC','Microsoft YaHei',sans-serif; background:var(--bg); color:var(--text); }
+
+  .hero {
+    background: linear-gradient(135deg, #0d1117 0%, #0f1f2e 50%, #0d1117 100%);
+    padding: 60px 40px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content:'';
+    position:absolute; top:-80px; left:50%; transform:translateX(-50%);
+    width:300px; height:300px;
+    background:radial-gradient(circle, rgba(121,192,255,0.10) 0%, transparent 70%);
+    pointer-events:none;
+  }
+  .bridge-deco { font-size:54px; line-height:1; margin-bottom:16px; animation:sway 5s ease-in-out infinite; }
+  @keyframes sway { 0%,100%{transform:rotate(-2deg);} 50%{transform:rotate(2deg);} }
+  .hero h1 { font-size:56px; font-weight:700; color:var(--accent); letter-spacing:0.15em; text-shadow:0 0 30px rgba(121,192,255,0.4); }
+  .hero .series { color:var(--text2); font-size:15px; margin-top:8px; letter-spacing:0.1em; }
+  .hero .tagline { margin-top:20px; font-size:17px; color:var(--text2); font-style:italic; line-height:2; }
+  .hero .stats { display:flex; gap:24px; justify-content:center; margin-top:24px; flex-wrap:wrap; }
+  .stat-pill { background:var(--bg3); border:1px solid var(--border); border-radius:20px; padding:6px 18px; font-size:13px; color:var(--text2); }
+  .stat-pill span { color:var(--accent); font-weight:600; }
+
+  nav { position:sticky; top:0; z-index:100; background:rgba(13,17,23,0.95); backdrop-filter:blur(10px); border-bottom:1px solid var(--border); display:flex; overflow-x:auto; }
+  nav a { color:var(--text2); text-decoration:none; padding:14px 20px; font-size:13px; white-space:nowrap; border-bottom:2px solid transparent; transition:all 0.2s; }
+  nav a:hover, nav a.active { color:var(--accent); border-bottom-color:var(--accent); }
+
+  main { max-width:1100px; margin:0 auto; padding:40px 24px; }
+
+  .section { display:none; animation:fadeIn 0.4s ease; }
+  .section.active { display:block; }
+  @keyframes fadeIn { from{opacity:0;transform:translateY(10px);}to{opacity:1;transform:translateY(0);} }
+
+  .card { background:var(--bg2); border:1px solid var(--border); border-radius:12px; padding:28px; margin-bottom:20px; }
+  .card h2 { font-size:20px; color:var(--accent); margin-bottom:16px; display:flex; align-items:center; gap:10px; }
+  .card p { color:var(--text); line-height:1.9; font-size:15px; }
+  .card .label { color:var(--text2); font-size:12px; text-transform:uppercase; letter-spacing:0.1em; margin-bottom:4px; margin-top:16px; }
+
+  .tag { display:inline-block; background:rgba(121,192,255,0.1); border:1px solid rgba(121,192,255,0.3); color:var(--accent); border-radius:6px; padding:3px 10px; font-size:12px; margin:3px; }
+  .tag.green { background:rgba(126,232,162,0.1); border-color:rgba(126,232,162,0.3); color:var(--accent2); }
+  .tag.orange { background:rgba(255,166,87,0.1); border-color:rgba(255,166,87,0.3); color:var(--accent3); }
+  .tag.red { background:rgba(247,129,102,0.1); border-color:rgba(247,129,102,0.3); color:var(--accent4); }
+
+  /* POEM */
+  .poem-box {
+    background: linear-gradient(135deg, #0d1a2e, #1a1a2e);
+    border:1px solid rgba(121,192,255,0.2);
+    border-radius:12px; padding:48px; text-align:center;
+    font-size:20px; line-height:2.8; color:#dde; letter-spacing:0.1em; position:relative;
+  }
+  .poem-box .p-single { }
+  .poem-box .repeat-lines { font-size:26px; color:var(--accent); letter-spacing:0.5em; font-weight:700; line-height:2; }
+  .poem-box .ellipsis { font-size:32px; color:var(--text2); letter-spacing:0.3em; margin-top:8px; opacity:0.7; }
+
+  /* CHAR */
+  .char-single {
+    background:var(--bg3); border:1px solid var(--border); border-radius:12px;
+    padding:28px; display:flex; gap:24px; align-items:flex-start;
+  }
+  .char-avatar { font-size:48px; flex-shrink:0; }
+  .char-name { font-size:17px; font-weight:600; color:var(--accent); margin-bottom:4px; }
+  .char-role { font-size:13px; color:var(--text2); margin-bottom:12px; }
+  .char-symbol { font-size:13px; color:#f5e6a3; font-style:italic; margin-top:10px; }
+
+  /* TIMELINE - 5 steps */
+  .tl5 { position:relative; }
+  .tl5-track {
+    display:flex; align-items:flex-start; gap:0;
+    position:relative; margin-bottom:32px;
+  }
+  .tl5-track::before {
+    content:''; position:absolute;
+    top:20px; left:20px; right:20px; height:2px;
+    background:linear-gradient(to right, var(--accent), rgba(121,192,255,0.2));
+    z-index:0;
+  }
+  .tl5-node {
+    flex:1; position:relative; z-index:1;
+    display:flex; flex-direction:column; align-items:center;
+    padding:0 8px;
+  }
+  .tl5-dot {
+    width:40px; height:40px; border-radius:50%;
+    background:var(--bg2); border:2px solid var(--accent);
+    display:flex; align-items:center; justify-content:center;
+    font-size:18px; margin-bottom:10px;
+    box-shadow:0 0 12px rgba(121,192,255,0.3);
+  }
+  .tl5-label { font-size:11px; color:var(--text2); text-align:center; letter-spacing:0.05em; }
+  .tl5-cards { display:grid; grid-template-columns:repeat(5,1fr); gap:12px; }
+  .tl5-card {
+    background:var(--bg3); border:1px solid var(--border);
+    border-radius:10px; padding:14px;
+  }
+  .tl5-phase { font-size:11px; color:var(--accent); letter-spacing:0.08em; margin-bottom:6px; }
+  .tl5-event { font-size:13px; color:var(--text); line-height:1.7; margin-bottom:8px; }
+  .tl5-emotion { font-size:11px; color:var(--accent3); font-style:italic; }
+  @media(max-width:700px){ .tl5-cards{grid-template-columns:1fr 1fr;} .tl5-track{display:none;} }
+
+  /* VALUES */
+  .value-list { display:flex; flex-direction:column; gap:14px; }
+  .value-item { background:var(--bg3); border-left:3px solid var(--accent); border-radius:0 8px 8px 0; padding:14px 18px; }
+  .value-name { color:var(--accent); font-weight:600; font-size:15px; margin-bottom:6px; }
+  .value-evidence { color:var(--text2); font-size:13px; line-height:1.7; }
+
+  /* LIT */
+  .lit-list { display:flex; flex-direction:column; gap:12px; }
+  .lit-item { background:var(--bg3); border-radius:8px; padding:14px 18px; display:flex; gap:14px; align-items:flex-start; }
+  .lit-device { background:rgba(255,166,87,0.15); border:1px solid rgba(255,166,87,0.3); color:var(--accent3); border-radius:6px; padding:2px 10px; font-size:12px; white-space:nowrap; flex-shrink:0; }
+  .lit-example { color:var(--text2); font-size:13px; line-height:1.7; }
+
+  footer { text-align:center; padding:32px; color:var(--text2); font-size:12px; border-top:1px solid var(--border); margin-top:40px; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="bridge-deco">🌉</div>
+  <h1>桥</h1>
+  <div class="series">森林的孩子·故事诗 · 第02篇</div>
+  <div class="tagline">
+    "走到桥中央，忘记了方向"<br>
+    ——一首关于抉择、徘徊与悬置的极简哲理诗
+  </div>
+  <div class="stats">
+    <div class="stat-pill">字数 <span>24字</span></div>
+    <div class="stat-pill">节数 <span>1节</span></div>
+    <div class="stat-pill">视角 <span>隐含第三人称</span></div>
+    <div class="stat-pill">类型 <span>故事诗·哲理·极简</span></div>
+    <div class="stat-pill">结尾 <span>省略号·悬置</span></div>
+  </div>
+</div>
+
+<nav id="nav">
+  <a href="#" class="active" onclick="showTab('poem',this)">📜 原文</a>
+  <a href="#" onclick="showTab('overview',this)">📖 故事概述</a>
+  <a href="#" onclick="showTab('background',this)">🌉 故事背景</a>
+  <a href="#" onclick="showTab('characters',this)">👤 人物图谱</a>
+  <a href="#" onclick="showTab('timeline',this)">📅 时间线</a>
+  <a href="#" onclick="showTab('values',this)">💡 价值观</a>
+  <a href="#" onclick="showTab('stanzas',this)">🏷️ 章节标签</a>
+  <a href="#" onclick="showTab('literary',this)">✍️ 文学手法</a>
+</nav>
+
+<main>
+
+<!-- 原文 -->
+<div id="section-poem" class="section active">
+  <div class="card">
+    <h2><span class="icon">📜</span>原文全文</h2>
+    <div class="poem-box">
+      <div class="p-single">
+        走到桥中央<br>
+        忘记了方向<br>
+        是去彼岸<br>
+        是回此岸
+      </div>
+      <div class="repeat-lines" style="margin-top:20px;">
+        去&nbsp;&nbsp;回<br>去&nbsp;&nbsp;回
+      </div>
+      <div class="ellipsis">……</div>
+    </div>
+  </div>
+</div>
+
+<!-- 概述 -->
+<div id="section-overview" class="section">
+  <div class="card">
+    <h2><span class="icon">📖</span>故事概述</h2>
+    <p>一个人走到桥的中央，忘记了方向——是继续前往彼岸，还是退回此岸？诗以"去/回"的交替反复，呈现内心的徘徊与犹豫，最终以省略号收尾，将答案悬置，留给读者无尽的余白。</p>
+    <div class="label">体裁</div>
+    <div><span class="tag">故事诗</span><span class="tag">哲理诗</span><span class="tag">极简诗</span></div>
+    <div class="label">叙事视角</div>
+    <p>隐含第三人称，无明确的"你/我/他"，主角是任何一个人</p>
+    <div class="label">基调</div>
+    <p>静默、沉思、悬而未决</p>
+    <div class="label">与第01篇《羽》的对比</div>
+    <p>《羽》以"你"的视角、奇幻动作收尾；《桥》以无名视角、省略号悬置——从外向行动转向内向沉思，是系列中两种截然不同的心理姿态。</p>
+  </div>
+</div>
+
+<!-- 背景 -->
+<div id="section-background" class="section">
+  <div class="card">
+    <h2><span class="icon">🌉</span>故事背景</h2>
+    <div class="label">时间</div>
+    <p>未明，时间被模糊处理——没有"夜"、没有"晨"，时间的缺席本身暗示这是一个永恒的困境节点</p>
+    <div class="label">地点</div>
+    <p>桥·桥中央。桥是连接两端的结构，而"中央"是最不属于任何一端的位置</p>
+    <div class="label">氛围</div>
+    <p>静止、悬停、空旷。相比《羽》的花香月色，《桥》的世界被清空至极限——只剩方向的困惑</p>
+    <div class="label">世界设定</div>
+    <p>极简世界：只有桥、此岸、彼岸，没有其他人物、动物或自然背景。空白本身即意义。这种"减法"构建，使每一个字的重量被最大化。</p>
+  </div>
+</div>
+
+<!-- 人物 -->
+<div id="section-characters" class="section">
+  <div class="card">
+    <h2><span class="icon">👤</span>人物简介</h2>
+    <div class="char-single">
+      <div class="char-avatar">🚶</div>
+      <div>
+        <div class="char-name">走路的人（主角·无名者）</div>
+        <div class="char-role">主角 · 抉择者</div>
+        <div>
+          <span class="tag">迷失</span>
+          <span class="tag">犹豫</span>
+          <span class="tag">中间状态</span>
+          <span class="tag">未做出选择</span>
+        </div>
+        <p style="margin-top:12px;color:var(--text2);font-size:14px;line-height:1.9;">
+          无名、无性别、无年龄——这个主角的"空白"是刻意的。他/她代表每一个曾经站在人生分叉点、忘记该去哪里的人。<br>
+          <strong style="color:var(--text)">成长弧</strong>：行走 → 抵达桥中央 → 忘记方向 → 反复犹豫 → 悬置于省略号中
+        </p>
+        <div class="char-symbol">✨ 象征：每一个站在人生岔路口的人</div>
+      </div>
+    </div>
+  </div>
+  <div class="card">
+    <h2><span class="icon">🔗</span>人物关系</h2>
+    <p style="color:var(--text2);font-style:italic;">本诗无其他人物，主角独自面对内心困境。孤独本身是这首诗的重要组成部分。</p>
+  </div>
+</div>
+
+<!-- 时间线 -->
+<div id="section-timeline" class="section">
+  <div class="card">
+    <h2><span class="icon">📅</span>故事时间线与重大事件</h2>
+    <div class="tl5">
+      <div class="tl5-track">
+        <div class="tl5-node"><div class="tl5-dot">🚶</div><div class="tl5-label">行</div></div>
+        <div class="tl5-node"><div class="tl5-dot">❓</div><div class="tl5-label">惑</div></div>
+        <div class="tl5-node"><div class="tl5-dot">⚖️</div><div class="tl5-label">问</div></div>
+        <div class="tl5-node"><div class="tl5-dot">🔄</div><div class="tl5-label">徘</div></div>
+        <div class="tl5-node"><div class="tl5-dot">…</div><div class="tl5-label">悬</div></div>
+      </div>
+      <div class="tl5-cards">
+        <div class="tl5-card">
+          <div class="tl5-phase">行·踏上桥</div>
+          <div class="tl5-event">走到桥中央。动作已完成，主角已到达最关键的位置。</div>
+          <div class="tl5-emotion">平静，尚未意识到困惑</div>
+        </div>
+        <div class="tl5-card">
+          <div class="tl5-phase">惑·忘记方向</div>
+          <div class="tl5-event">忘记了方向。不是不知道路，而是忘记了自己要去哪里。</div>
+          <div class="tl5-emotion">茫然、失重</div>
+        </div>
+        <div class="tl5-card">
+          <div class="tl5-phase">问·两难抉择</div>
+          <div class="tl5-event">是去彼岸，是回此岸。两个选项摆在面前，却都无法轻易选择。</div>
+          <div class="tl5-emotion">纠结、对峙</div>
+        </div>
+        <div class="tl5-card">
+          <div class="tl5-phase">徘·反复犹豫</div>
+          <div class="tl5-event">去/回/去/回。四字反复，时间在这里失去流向，内心陷入循环。</div>
+          <div class="tl5-emotion">焦虑、循环、困顿</div>
+        </div>
+        <div class="tl5-card">
+          <div class="tl5-phase">悬·省略号</div>
+          <div class="tl5-event">……答案未给出。诗在此停止，但主角还站在桥上。</div>
+          <div class="tl5-emotion">悬置、沉默、开放</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 价值观 -->
+<div id="section-values" class="section">
+  <div class="card">
+    <h2><span class="icon">💡</span>故事价值观</h2>
+    <div class="value-list">
+      <div class="value-item">
+        <div class="value-name">⚖️ 选择的两难</div>
+        <div class="value-evidence">去与回都是路，但站在中间时两者都同等沉重，诗揭示了选择的本质困境——有时无法选择，不是因为软弱，而是因为两端都是真实的。</div>
+      </div>
+      <div class="value-item">
+        <div class="value-name">🌊 迷失的勇气</div>
+        <div class="value-evidence">允许自己"忘记方向"，不强行给出答案，是另一种面对不确定性的勇气。诗不说教，不给出选择，这本身就是一种尊重。</div>
+      </div>
+      <div class="value-item">
+        <div class="value-name">⏳ 过程即存在</div>
+        <div class="value-evidence">走到桥中央本身是行动，徘徊本身是思考，省略号是尊重内心复杂性的留白。困惑不是失败，而是存在的一部分。</div>
+      </div>
+      <div class="value-item">
+        <div class="value-name">🌌 此岸与彼岸的哲学</div>
+        <div class="value-evidence">彼岸象征未来/理想/未知，此岸象征过去/熟悉/安全，桥是每个人必须独自面对的抉择。没有人能替你站在那个中央。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 章节标签 -->
+<div id="section-stanzas" class="section">
+  <div class="card">
+    <h2><span class="icon">🏷️</span>各节题目与关键标签</h2>
+    <div style="background:var(--bg3);border:1px solid var(--border);border-radius:10px;padding:24px;">
+      <div style="color:var(--text2);font-size:12px;letter-spacing:0.1em;margin-bottom:8px;">第一节（全诗唯一节）</div>
+      <div style="font-size:18px;font-weight:700;color:var(--accent2);margin-bottom:16px;">桥中央的停顿</div>
+      <div style="color:var(--text2);font-style:italic;font-size:14px;line-height:2.2;margin-bottom:16px;">
+        走到桥中央 / 忘记了方向 / 是去彼岸 / 是回此岸 / 去 / 回 / 去 / 回 / ……
+      </div>
+      <div>
+        <span class="tag">桥</span>
+        <span class="tag">迷失</span>
+        <span class="tag">彼岸</span>
+        <span class="tag">此岸</span>
+        <span class="tag orange">犹豫</span>
+        <span class="tag orange">选择</span>
+        <span class="tag orange">省略号</span>
+        <span class="tag green">极简</span>
+        <span class="tag green">悬念</span>
+        <span class="tag green">哲理</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 文学手法 -->
+<div id="section-literary" class="section">
+  <div class="card">
+    <h2><span class="icon">✍️</span>文学手法分析</h2>
+    <div class="lit-list">
+      <div class="lit-item">
+        <span class="lit-device">反复</span>
+        <span class="lit-example">"去 / 回 / 去 / 回"四字独立成行，反复出现，节奏急促，像心跳，像钟摆，呈现内心无法停止的徘徊。</span>
+      </div>
+      <div class="lit-item">
+        <span class="lit-device">对比</span>
+        <span class="lit-example">"彼岸"与"此岸"构成方向与意义上的对立，而"去"与"回"则是行动上的对立。两重对比叠加，强化两难困境。</span>
+      </div>
+      <div class="lit-item">
+        <span class="lit-device">省略号结尾</span>
+        <span class="lit-example">"……"是全诗最重要的一行。它不是标点，而是答案——问题本身就是答案，悬置就是诗的终点。</span>
+      </div>
+      <div class="lit-item">
+        <span class="lit-device">极简主义</span>
+        <span class="lit-example">全诗仅24字，是《羽》的三分之一。字数越少，每个字的重量越大。"忘记了方向"五字，承载了整个心理困境。</span>
+      </div>
+      <div class="lit-item">
+        <span class="lit-device">意象聚焦</span>
+        <span class="lit-example">全诗仅五个核心意象：桥·彼岸·此岸·去·回。没有装饰，没有比喻，只有最直接的符号，反而产生最强的震动。</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  《桥》· 森林的孩子·故事诗 · 文本结构化分析 · 2026-03-22<br>
+  <small style="color:#484f58">自动生成 · 任务-20260322-0001</small>
+</footer>
+
+<script>
+function showTab(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>

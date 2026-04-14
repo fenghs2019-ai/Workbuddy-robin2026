@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+  <meta>
+    <title>羽</title>
+    <series>森林的孩子·故事诗</series>
+    <episode>01</episode>
+    <source_file>01-羽.docx</source_file>
+    <analyzed_at>2026-03-22</analyzed_at>
+    <word_count>72</word_count>
+    <stanza_count>4</stanza_count>
+  </meta>
+
+  <original_text>
+    <stanza seq="1">
+      <line>没有星星的夜</line>
+      <line>月亮镶嵌在天空</line>
+      <line>桂影随风婆娑</line>
+      <line>花香弥漫在树间</line>
+    </stanza>
+    <stanza seq="2">
+      <line>你想飞上月亮</line>
+      <line>折枝桂花给隔壁的小鸟</line>
+      <line>老树送你他的叶子</line>
+      <line>十个夜晚做成翅膀</line>
+    </stanza>
+    <stanza seq="3">
+      <line>站在树顶</line>
+      <line>展开翅膀</line>
+      <line>你飞呀</line>
+      <line>却跌落下来</line>
+    </stanza>
+    <stanza seq="4">
+      <line>小鸟问你花在哪里</line>
+      <line>你说月亮是个小气鬼</line>
+      <line>她把自己变小</line>
+      <line>把花藏起来了</line>
+    </stanza>
+  </original_text>
+
+  <story_overview>
+    <summary>一个渴望飞翔的孩子，在月夜里折桂花枝要送给隔壁小鸟。老树用十个夜晚的叶子帮他做成翅膀。他站上树顶展翅飞翔，却跌落下来。小鸟追问花，他用充满想象力的解释化解了失败：月亮变小了，把花藏起来了。</summary>
+    <genres>
+      <genre>故事诗</genre>
+      <genre>童诗</genre>
+      <genre>奇幻寓言</genre>
+    </genres>
+    <tone>温柔、奇幻、充满童真</tone>
+    <pov>第二人称（你）</pov>
+  </story_overview>
+
+  <story_background>
+    <time>没有星星的夜晚，月夜</time>
+    <setting>森林，树间，树顶</setting>
+    <atmosphere>月光朦胧，桂香弥漫，静谧而充满奇幻气息</atmosphere>
+    <world_notes>自然万物有情感的世界——老树会慷慨赠叶，小鸟会对话，月亮有个性（小气鬼）</world_notes>
+  </story_background>
+
+  <characters>
+    <character>
+      <name>你（主角·孩子）</name>
+      <role>主角</role>
+      <traits>充满梦想，勇于尝试，富有想象力，善良</traits>
+      <arc>怀揣飞翔梦想 → 借助老树翅膀尝试 → 跌落失败 → 用想象力自我解嘲</arc>
+      <symbol>羽·飞翔的渴望</symbol>
+    </character>
+    <character>
+      <name>老树</name>
+      <role>助力者</role>
+      <traits>慷慨，耐心（十个夜晚），无声的支持者</traits>
+      <arc>赠叶，成就他人的梦</arc>
+      <symbol>根·大地的力量与包容</symbol>
+    </character>
+    <character>
+      <name>小鸟</name>
+      <role>情感纽带·受赠者</role>
+      <traits>天真，信任</traits>
+      <arc>等待花 → 追问花在哪里</arc>
+      <symbol>自由飞翔的象征</symbol>
+    </character>
+    <character>
+      <name>月亮</name>
+      <role>神秘他者·幻想对象</role>
+      <traits>神秘，在主角眼中是小气鬼</traits>
+      <arc>由大变小，被拟人化为藏花的小气鬼</arc>
+      <symbol>遥不可及的梦想彼岸</symbol>
+    </character>
+  </characters>
+
+  <character_relations>
+    <relation>
+      <from>你（主角）</from>
+      <to>小鸟</to>
+      <description>挚友，想为其摘桂花</description>
+      <type>友情</type>
+    </relation>
+    <relation>
+      <from>老树</from>
+      <to>你（主角）</to>
+      <description>赠予者，成就梦想的支持者</description>
+      <type>庇护</type>
+    </relation>
+    <relation>
+      <from>你（主角）</from>
+      <to>月亮</to>
+      <description>渴望者，视月亮为目的地</description>
+      <type>追梦</type>
+    </relation>
+    <relation>
+      <from>小鸟</from>
+      <to>你（主角）</to>
+      <description>追问者，间接推动故事结局</description>
+      <type>友情</type>
+    </relation>
+  </character_relations>
+
+  <timeline>
+    <event seq="1">
+      <phase>起·月夜背景</phase>
+      <stanza_ref>1</stanza_ref>
+      <description>没有星星的夜晚，月亮挂天，桂影婆娑，花香飘散</description>
+      <key_images>月·桂花·花香</key_images>
+      <emotion>宁静、美好</emotion>
+    </event>
+    <event seq="2">
+      <phase>承·梦想萌生</phase>
+      <stanza_ref>2</stanza_ref>
+      <description>主角想飞上月亮为小鸟摘桂花，老树赠叶，十夜做成翅膀</description>
+      <key_images>翅膀·叶子·十个夜晚</key_images>
+      <emotion>期待、温暖</emotion>
+    </event>
+    <event seq="3">
+      <phase>转·飞翔与跌落</phase>
+      <stanza_ref>3</stanza_ref>
+      <description>站上树顶，展翅飞翔，却跌落下来</description>
+      <key_images>树顶·展翅·跌落</key_images>
+      <emotion>紧张、失落</emotion>
+    </event>
+    <event seq="4">
+      <phase>合·想象力的救赎</phase>
+      <stanza_ref>4</stanza_ref>
+      <description>小鸟追问花，主角称月亮变小把花藏起来了</description>
+      <key_images>月亮·小气鬼·藏花</key_images>
+      <emotion>幽默、温柔、自我解嘲</emotion>
+    </event>
+  </timeline>
+
+  <values>
+    <value>
+      <name>勇于追梦</name>
+      <evidence>明知可能跌落，仍站上树顶展翅一跳</evidence>
+    </value>
+    <value>
+      <name>爱与利他</name>
+      <evidence>飞翔的动机不是为自己，而是为隔壁小鸟折枝桂花</evidence>
+    </value>
+    <value>
+      <name>自然的馈赠与感恩</name>
+      <evidence>老树无偿奉献叶子，用十个夜晚帮助孩子</evidence>
+    </value>
+    <value>
+      <name>想象力的力量</name>
+      <evidence>跌落后不认失败，用充满童趣的想象化解困境</evidence>
+    </value>
+    <value>
+      <name>失败的尊严</name>
+      <evidence>跌落不等于放弃，用故事重新诠释现实</evidence>
+    </value>
+  </values>
+
+  <stanza_labels>
+    <stanza_label seq="1">
+      <title>月夜的邀请</title>
+      <tags>
+        <tag>月夜</tag><tag>桂花</tag><tag>环境描写</tag><tag>奇幻氛围</tag><tag>开篇</tag>
+      </tags>
+    </stanza_label>
+    <stanza_label seq="2">
+      <title>翅膀的诞生</title>
+      <tags>
+        <tag>梦想</tag><tag>利他</tag><tag>老树赠叶</tag><tag>翅膀</tag><tag>友情</tag><tag>准备</tag>
+      </tags>
+    </stanza_label>
+    <stanza_label seq="3">
+      <title>飞翔与跌落</title>
+      <tags>
+        <tag>飞翔</tag><tag>失败</tag><tag>跌落</tag><tag>勇气</tag><tag>转折</tag>
+      </tags>
+    </stanza_label>
+    <stanza_label seq="4">
+      <title>月亮的秘密</title>
+      <tags>
+        <tag>想象力</tag><tag>童趣</tag><tag>月亮拟人</tag><tag>自我解嘲</tag><tag>收尾</tag><tag>幽默</tag>
+      </tags>
+    </stanza_label>
+  </stanza_labels>
+
+  <literary_devices>
+    <device>
+      <name>拟人</name>
+      <example>月亮是个小气鬼，把自己变小，把花藏起来了</example>
+    </device>
+    <device>
+      <name>意象叠加</name>
+      <example>月亮·桂影·花香·老树·翅膀·小鸟构成完整奇幻世界</example>
+    </device>
+    <device>
+      <name>第二人称叙述</name>
+      <example>全诗用"你"拉近读者距离，产生强烈代入感</example>
+    </device>
+    <device>
+      <name>时间压缩</name>
+      <example>"十个夜晚"一笔带过漫长等待，暗示坚持</example>
+    </device>
+    <device>
+      <name>反转结局</name>
+      <example>飞翔失败后用想象力重构现实，形成情感上的轻盈落地</example>
+    </device>
+  </literary_devices>
+</document>

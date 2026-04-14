@@ -1,0 +1,95 @@
+{
+  "meta": {
+    "title": "术",
+    "series": "森林的孩子·故事诗",
+    "episode": "41",
+    "source_file": "41-术.docx",
+    "analyzed_at": "2026-04-01",
+    "word_count": 18,
+    "line_count": 8
+  },
+  "story_overview": {
+    "summary": "一首关于'术'的童话诗，描绘了8行诗意场景。",
+    "genre": [
+      "故事诗",
+      "童诗"
+    ],
+    "tone": "纯真、美好",
+    "pov": "第三人称",
+    "length": "短诗，8行"
+  },
+  "story_background": {
+    "time": "现代/当代",
+    "setting": "森林/自然",
+    "atmosphere": "纯真、梦幻",
+    "world_notes": "自然万物有灵性的童话世界"
+  },
+  "characters": [
+    {
+      "name": "你（叙述对象/主角）",
+      "role": "主角",
+      "traits": [
+        "纯真",
+        "善良",
+        "充满想象力"
+      ],
+      "arc": "在童话世界中体验与成长",
+      "symbol": "术·生命力的象征"
+    },
+    {
+      "name": "自然万物",
+      "role": "环境/助力者",
+      "traits": [
+        "有灵性",
+        "美好"
+      ],
+      "arc": "陪伴与见证",
+      "symbol": "自然·生命的来源"
+    }
+  ],
+  "character_relations": [
+    {
+      "from": "你",
+      "to": "自然",
+      "relation": "体验与融合",
+      "type": "和谐"
+    }
+  ],
+  "timeline": [
+    {
+      "seq": 1,
+      "phase": "场景展开",
+      "stanza": 1,
+      "event": "关于'术'的诗意场景",
+      "key_image": "术",
+      "emotion": "美好"
+    }
+  ],
+  "values": {
+    "theme": [
+      "纯真",
+      "自然",
+      "美好"
+    ],
+    "morals": [
+      "珍惜自然",
+      "保持童真",
+      "拥抱美好"
+    ],
+    "emotions": [
+      "温暖",
+      "感动",
+      "希望"
+    ]
+  },
+  "chapters": {
+    "title": "术",
+    "tags": [
+      "术",
+      "童话",
+      "自然"
+    ],
+    "summary": "花\n很香\n香\n飘到\n很远的地方\n\n你\n很远的地方\n来"
+  },
+  "original_text": "花\n很香\n香\n飘到\n很远的地方\n\n你\n很远的地方\n来"
+}

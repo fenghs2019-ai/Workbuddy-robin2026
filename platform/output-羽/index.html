@@ -1,0 +1,761 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>《羽》— 文本结构化分析</title>
+<style>
+  :root {
+    --bg: #0d1117;
+    --bg2: #161b22;
+    --bg3: #21262d;
+    --accent: #7ee8a2;
+    --accent2: #79c0ff;
+    --accent3: #ffa657;
+    --accent4: #f78166;
+    --text: #e6edf3;
+    --text2: #8b949e;
+    --border: #30363d;
+    --moon: #f0e68c;
+  }
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body {
+    font-family: 'PingFang SC','Microsoft YaHei',sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HEADER */
+  .hero {
+    background: linear-gradient(135deg, #0d1117 0%, #1a2a1a 50%, #0d1117 100%);
+    padding: 60px 40px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+    border-bottom: 1px solid var(--border);
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -80px; left: 50%;
+    transform: translateX(-50%);
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(126,232,162,0.12) 0%, transparent 70%);
+    pointer-events: none;
+  }
+  .moon-deco {
+    font-size: 60px;
+    line-height: 1;
+    margin-bottom: 16px;
+    animation: float 4s ease-in-out infinite;
+  }
+  @keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+  }
+  .hero h1 {
+    font-size: 56px;
+    font-weight: 700;
+    color: var(--accent);
+    letter-spacing: 0.15em;
+    text-shadow: 0 0 30px rgba(126,232,162,0.4);
+  }
+  .hero .series {
+    color: var(--text2);
+    font-size: 15px;
+    margin-top: 8px;
+    letter-spacing: 0.1em;
+  }
+  .hero .tagline {
+    margin-top: 20px;
+    font-size: 18px;
+    color: var(--text2);
+    font-style: italic;
+    line-height: 1.8;
+  }
+  .hero .stats {
+    display: flex;
+    gap: 32px;
+    justify-content: center;
+    margin-top: 28px;
+    flex-wrap: wrap;
+  }
+  .stat-pill {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 20px;
+    padding: 6px 18px;
+    font-size: 13px;
+    color: var(--text2);
+  }
+  .stat-pill span { color: var(--accent); font-weight: 600; }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(13,17,23,0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+  }
+  nav a {
+    color: var(--text2);
+    text-decoration: none;
+    padding: 14px 20px;
+    font-size: 13px;
+    white-space: nowrap;
+    border-bottom: 2px solid transparent;
+    transition: all 0.2s;
+  }
+  nav a:hover, nav a.active {
+    color: var(--accent);
+    border-bottom-color: var(--accent);
+  }
+
+  /* MAIN LAYOUT */
+  main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 40px 24px;
+  }
+
+  /* SECTION */
+  .section {
+    display: none;
+    animation: fadeIn 0.4s ease;
+  }
+  .section.active { display: block; }
+  @keyframes fadeIn { from { opacity:0; transform:translateY(10px); } to { opacity:1; transform:translateY(0); } }
+
+  /* CARD */
+  .card {
+    background: var(--bg2);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 28px;
+    margin-bottom: 20px;
+  }
+  .card h2 {
+    font-size: 20px;
+    color: var(--accent);
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .card h2 .icon { font-size: 22px; }
+  .card p {
+    color: var(--text);
+    line-height: 1.9;
+    font-size: 15px;
+  }
+  .card .label {
+    color: var(--text2);
+    font-size: 12px;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+    margin-top: 16px;
+  }
+
+  /* TAG */
+  .tag {
+    display: inline-block;
+    background: rgba(126,232,162,0.1);
+    border: 1px solid rgba(126,232,162,0.3);
+    color: var(--accent);
+    border-radius: 6px;
+    padding: 3px 10px;
+    font-size: 12px;
+    margin: 3px;
+  }
+  .tag.blue { background:rgba(121,192,255,0.1); border-color:rgba(121,192,255,0.3); color:var(--accent2); }
+  .tag.orange { background:rgba(255,166,87,0.1); border-color:rgba(255,166,87,0.3); color:var(--accent3); }
+  .tag.red { background:rgba(247,129,102,0.1); border-color:rgba(247,129,102,0.3); color:var(--accent4); }
+
+  /* POEM */
+  .poem-box {
+    background: linear-gradient(135deg, #0d1a0d, #1a1a2e);
+    border: 1px solid rgba(126,232,162,0.2);
+    border-radius: 12px;
+    padding: 36px;
+    text-align: center;
+    font-size: 17px;
+    line-height: 2.2;
+    color: #dde;
+    letter-spacing: 0.05em;
+    position: relative;
+    overflow: hidden;
+  }
+  .poem-box::after {
+    content: '🌙';
+    position: absolute;
+    bottom: 16px; right: 20px;
+    font-size: 28px;
+    opacity: 0.3;
+  }
+  .poem-stanza { margin-bottom: 24px; }
+  .poem-stanza:last-child { margin-bottom: 0; }
+  .poem-stanza .stanza-num {
+    color: var(--accent);
+    font-size: 11px;
+    letter-spacing: 0.2em;
+    margin-bottom: 8px;
+    opacity: 0.7;
+  }
+
+  /* CHARACTERS */
+  .char-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: 16px;
+  }
+  .char-card {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    transition: border-color 0.2s;
+  }
+  .char-card:hover { border-color: var(--accent); }
+  .char-avatar {
+    font-size: 36px;
+    margin-bottom: 10px;
+  }
+  .char-name {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--accent2);
+    margin-bottom: 4px;
+  }
+  .char-role {
+    font-size: 12px;
+    color: var(--text2);
+    margin-bottom: 10px;
+  }
+  .char-symbol {
+    font-size: 12px;
+    color: var(--moon);
+    margin-top: 8px;
+    font-style: italic;
+  }
+
+  /* RELATION */
+  .relation-list { display: flex; flex-direction: column; gap: 10px; }
+  .relation-item {
+    background: var(--bg3);
+    border-radius: 8px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 14px;
+  }
+  .rel-from, .rel-to { color: var(--accent2); font-weight: 500; }
+  .rel-arrow { color: var(--text2); }
+  .rel-desc { color: var(--text2); font-size: 12px; margin-left: auto; }
+
+  /* TIMELINE */
+  .timeline { position: relative; padding-left: 32px; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: 10px; top: 0; bottom: 0;
+    width: 2px;
+    background: linear-gradient(to bottom, var(--accent), transparent);
+  }
+  .tl-item {
+    position: relative;
+    margin-bottom: 28px;
+  }
+  .tl-dot {
+    position: absolute;
+    left: -27px; top: 6px;
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: var(--accent);
+    border: 3px solid var(--bg2);
+    box-shadow: 0 0 10px rgba(126,232,162,0.5);
+  }
+  .tl-phase {
+    font-size: 11px;
+    color: var(--text2);
+    letter-spacing: 0.1em;
+    margin-bottom: 4px;
+  }
+  .tl-event {
+    font-size: 15px;
+    color: var(--text);
+    line-height: 1.7;
+    margin-bottom: 8px;
+  }
+  .tl-emotion {
+    font-size: 12px;
+    color: var(--accent3);
+    font-style: italic;
+  }
+
+  /* VALUES */
+  .value-list { display: flex; flex-direction: column; gap: 14px; }
+  .value-item {
+    background: var(--bg3);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 8px 8px 0;
+    padding: 14px 18px;
+  }
+  .value-name { color: var(--accent); font-weight: 600; font-size: 15px; margin-bottom: 6px; }
+  .value-evidence { color: var(--text2); font-size: 13px; line-height: 1.7; }
+
+  /* STANZAS */
+  .stanza-grid { display: flex; flex-direction: column; gap: 16px; }
+  .stanza-item {
+    background: var(--bg3);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+  }
+  @media(max-width:600px){ .stanza-item { grid-template-columns: 1fr; } }
+  .stanza-title { color: var(--accent2); font-size: 16px; font-weight: 600; margin-bottom: 10px; }
+  .stanza-lines { color: var(--text2); font-size: 13px; line-height: 2; font-style: italic; }
+
+  /* LITERARY */
+  .lit-list { display: flex; flex-direction: column; gap: 12px; }
+  .lit-item {
+    background: var(--bg3);
+    border-radius: 8px;
+    padding: 14px 18px;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .lit-device {
+    background: rgba(255,166,87,0.15);
+    border: 1px solid rgba(255,166,87,0.3);
+    color: var(--accent3);
+    border-radius: 6px;
+    padding: 2px 10px;
+    font-size: 12px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .lit-example { color: var(--text2); font-size: 13px; line-height: 1.7; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 32px;
+    color: var(--text2);
+    font-size: 12px;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="moon-deco">🌙</div>
+  <h1>羽</h1>
+  <div class="series">森林的孩子·故事诗 · 第01篇</div>
+  <div class="tagline">
+    "你想飞上月亮，折枝桂花给隔壁的小鸟"<br>
+    ——一首关于梦想、失败与想象力的童诗
+  </div>
+  <div class="stats">
+    <div class="stat-pill">字数 <span>72字</span></div>
+    <div class="stat-pill">章节 <span>4节</span></div>
+    <div class="stat-pill">视角 <span>第二人称</span></div>
+    <div class="stat-pill">类型 <span>故事诗·童诗·奇幻</span></div>
+    <div class="stat-pill">基调 <span>温柔奇幻</span></div>
+  </div>
+</div>
+
+<nav id="nav">
+  <a href="#" class="active" onclick="showTab('poem', this)">📜 原文</a>
+  <a href="#" onclick="showTab('overview', this)">📖 故事概述</a>
+  <a href="#" onclick="showTab('background', this)">🌿 故事背景</a>
+  <a href="#" onclick="showTab('characters', this)">👤 人物图谱</a>
+  <a href="#" onclick="showTab('timeline', this)">📅 时间线</a>
+  <a href="#" onclick="showTab('values', this)">💡 故事价值观</a>
+  <a href="#" onclick="showTab('stanzas', this)">🏷️ 章节标签</a>
+  <a href="#" onclick="showTab('literary', this)">✍️ 文学手法</a>
+</nav>
+
+<main>
+
+<!-- 原文 -->
+<div id="section-poem" class="section active">
+  <div class="card">
+    <h2><span class="icon">📜</span>原文全文</h2>
+    <div class="poem-box">
+      <div class="poem-stanza">
+        <div class="stanza-num">— 一 —</div>
+        没有星星的夜<br>
+        月亮镶嵌在天空<br>
+        桂影随风婆娑<br>
+        花香弥漫在树间
+      </div>
+      <div class="poem-stanza">
+        <div class="stanza-num">— 二 —</div>
+        你想飞上月亮<br>
+        折枝桂花给隔壁的小鸟<br>
+        老树送你他的叶子<br>
+        十个夜晚做成翅膀
+      </div>
+      <div class="poem-stanza">
+        <div class="stanza-num">— 三 —</div>
+        站在树顶<br>
+        展开翅膀<br>
+        你飞呀<br>
+        却跌落下来
+      </div>
+      <div class="poem-stanza">
+        <div class="stanza-num">— 四 —</div>
+        小鸟问你花在哪里<br>
+        你说月亮是个小气鬼<br>
+        她把自己变小<br>
+        把花藏起来了
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 故事概述 -->
+<div id="section-overview" class="section">
+  <div class="card">
+    <h2><span class="icon">📖</span>故事概述</h2>
+    <p>一个渴望飞翔的孩子，在月夜里折桂花枝要送给隔壁小鸟。老树用十个夜晚的叶子帮他做成翅膀。他站上树顶展翅飞翔，却跌落下来。小鸟追问花在哪里，他用充满想象力的解释化解了失败：月亮变小了，把花藏起来了。</p>
+
+    <div class="label">体裁</div>
+    <div>
+      <span class="tag">故事诗</span>
+      <span class="tag">童诗</span>
+      <span class="tag">奇幻寓言</span>
+    </div>
+
+    <div class="label">叙事视角</div>
+    <p>第二人称（"你"），拉近读者距离，产生强烈代入感</p>
+
+    <div class="label">基调</div>
+    <p>温柔、奇幻、充满童真。以轻盈的失落收尾，留下温暖余韵。</p>
+
+    <div class="label">篇幅</div>
+    <p>短诗，四节，16行，72字</p>
+  </div>
+</div>
+
+<!-- 故事背景 -->
+<div id="section-background" class="section">
+  <div class="card">
+    <h2><span class="icon">🌿</span>故事背景</h2>
+
+    <div class="label">时间</div>
+    <p>没有星星的夜晚 · 月夜</p>
+
+    <div class="label">地点</div>
+    <p>森林 · 树间 · 树顶</p>
+
+    <div class="label">氛围</div>
+    <p>月光朦胧，桂香弥漫，静谧而充满奇幻气息。没有星星的夜晚反而让月亮更加突出，构成孤独而又明亮的意境。</p>
+
+    <div class="label">世界设定</div>
+    <p>这是一个自然万物有情感的世界——老树会慷慨赠叶，小鸟会与人对话，月亮有个性（被称为"小气鬼"）。森林里的生命彼此相连，充满温情。</p>
+  </div>
+</div>
+
+<!-- 人物图谱 -->
+<div id="section-characters" class="section">
+  <div class="card">
+    <h2><span class="icon">👤</span>人物简介</h2>
+    <div class="char-grid">
+      <div class="char-card">
+        <div class="char-avatar">🧒</div>
+        <div class="char-name">你（主角·孩子）</div>
+        <div class="char-role">主角 · 追梦者</div>
+        <div>
+          <span class="tag blue">充满梦想</span>
+          <span class="tag blue">勇于尝试</span>
+          <span class="tag blue">富有想象力</span>
+          <span class="tag blue">善良</span>
+        </div>
+        <div class="char-symbol">象征：羽·飞翔的渴望</div>
+      </div>
+      <div class="char-card">
+        <div class="char-avatar">🌳</div>
+        <div class="char-name">老树</div>
+        <div class="char-role">助力者 · 守护者</div>
+        <div>
+          <span class="tag">慷慨</span>
+          <span class="tag">耐心</span>
+          <span class="tag">无声支持</span>
+        </div>
+        <div class="char-symbol">象征：根·大地的力量与包容</div>
+      </div>
+      <div class="char-card">
+        <div class="char-avatar">🐦</div>
+        <div class="char-name">小鸟</div>
+        <div class="char-role">情感纽带 · 受赠者</div>
+        <div>
+          <span class="tag orange">天真</span>
+          <span class="tag orange">信任</span>
+        </div>
+        <div class="char-symbol">象征：自由飞翔本身</div>
+      </div>
+      <div class="char-card">
+        <div class="char-avatar">🌙</div>
+        <div class="char-name">月亮</div>
+        <div class="char-role">神秘他者 · 幻想对象</div>
+        <div>
+          <span class="tag red">神秘</span>
+          <span class="tag red">小气鬼</span>
+          <span class="tag red">拟人化</span>
+        </div>
+        <div class="char-symbol">象征：遥不可及的梦想彼岸</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2><span class="icon">🔗</span>人物关系</h2>
+    <div class="relation-list">
+      <div class="relation-item">
+        <span class="rel-from">你（主角）</span>
+        <span class="rel-arrow">→</span>
+        <span class="rel-to">小鸟</span>
+        <span>挚友，想为其摘桂花</span>
+        <span class="rel-desc">友情</span>
+      </div>
+      <div class="relation-item">
+        <span class="rel-from">老树</span>
+        <span class="rel-arrow">→</span>
+        <span class="rel-to">你（主角）</span>
+        <span>赠予叶子，成就梦想</span>
+        <span class="rel-desc">庇护·恩情</span>
+      </div>
+      <div class="relation-item">
+        <span class="rel-from">你（主角）</span>
+        <span class="rel-arrow">→</span>
+        <span class="rel-to">月亮</span>
+        <span>渴望者，视月亮为目的地</span>
+        <span class="rel-desc">追梦</span>
+      </div>
+      <div class="relation-item">
+        <span class="rel-from">小鸟</span>
+        <span class="rel-arrow">→</span>
+        <span class="rel-to">你（主角）</span>
+        <span>追问者，推动故事结局</span>
+        <span class="rel-desc">友情</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 时间线 -->
+<div id="section-timeline" class="section">
+  <div class="card">
+    <h2><span class="icon">📅</span>故事时间线与重大事件</h2>
+    <div class="timeline">
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-phase">起 · 第一节</div>
+        <div class="tl-event"><strong>月夜背景铺展</strong><br>没有星星的夜晚，月亮挂天，桂影婆娑，花香飘散——奇幻世界就此拉开帷幕。</div>
+        <div>
+          <span class="tag">月夜</span>
+          <span class="tag">桂花</span>
+          <span class="tag">环境描写</span>
+        </div>
+        <div class="tl-emotion">情绪：宁静、美好</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-phase">承 · 第二节</div>
+        <div class="tl-event"><strong>梦想萌生，翅膀诞生</strong><br>主角想飞上月亮为小鸟摘桂花，老树赠叶，用十个夜晚做成翅膀。</div>
+        <div>
+          <span class="tag orange">翅膀</span>
+          <span class="tag orange">十个夜晚</span>
+          <span class="tag orange">老树赠叶</span>
+        </div>
+        <div class="tl-emotion">情绪：期待、温暖</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-phase">转 · 第三节</div>
+        <div class="tl-event"><strong>飞翔与跌落</strong><br>站上树顶，展翅飞翔，却跌落下来。最短的一节，却是全诗最重的转折。</div>
+        <div>
+          <span class="tag red">跌落</span>
+          <span class="tag red">失败</span>
+          <span class="tag red">转折</span>
+        </div>
+        <div class="tl-emotion">情绪：紧张、失落</div>
+      </div>
+      <div class="tl-item">
+        <div class="tl-dot"></div>
+        <div class="tl-phase">合 · 第四节</div>
+        <div class="tl-event"><strong>想象力的救赎</strong><br>小鸟追问花，主角称月亮变小把花藏起来了——用童趣解释化解失败，轻盈落幕。</div>
+        <div>
+          <span class="tag">想象力</span>
+          <span class="tag">月亮小气鬼</span>
+          <span class="tag">幽默</span>
+        </div>
+        <div class="tl-emotion">情绪：幽默、温柔、自我解嘲</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 价值观 -->
+<div id="section-values" class="section">
+  <div class="card">
+    <h2><span class="icon">💡</span>故事价值观</h2>
+    <div class="value-list">
+      <div class="value-item">
+        <div class="value-name">🌟 勇于追梦</div>
+        <div class="value-evidence">明知可能跌落，仍站上树顶展翅一跳。行动本身即勇气。</div>
+      </div>
+      <div class="value-item">
+        <div class="value-name">❤️ 爱与利他</div>
+        <div class="value-evidence">飞翔的动机不是为自己，而是为隔壁小鸟折枝桂花。爱是起点。</div>
+      </div>
+      <div class="value-item">
+        <div class="value-name">🌿 自然的馈赠与感恩</div>
+        <div class="value-evidence">老树无偿奉献叶子，用十个夜晚帮助孩子。自然是慷慨的守护者。</div>
+      </div>
+      <div class="value-item">
+        <div class="value-name">✨ 想象力的力量</div>
+        <div class="value-evidence">跌落后不认失败，用充满童趣的想象化解困境——"月亮是个小气鬼"。想象是心灵的飞翔。</div>
+      </div>
+      <div class="value-item">
+        <div class="value-name">🕊️ 失败的尊严</div>
+        <div class="value-evidence">跌落不等于放弃，用故事重新诠释现实，保持了心灵的完整。</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 章节标签 -->
+<div id="section-stanzas" class="section">
+  <div class="card">
+    <h2><span class="icon">🏷️</span>各节题目与关键标签</h2>
+    <div class="stanza-grid">
+      <div class="stanza-item">
+        <div>
+          <div class="tl-phase">第一节</div>
+          <div class="stanza-title">月夜的邀请</div>
+          <div>
+            <span class="tag">月夜</span>
+            <span class="tag">桂花</span>
+            <span class="tag">环境描写</span>
+            <span class="tag">奇幻氛围</span>
+            <span class="tag">开篇</span>
+          </div>
+        </div>
+        <div class="stanza-lines">
+          没有星星的夜<br>月亮镶嵌在天空<br>桂影随风婆娑<br>花香弥漫在树间
+        </div>
+      </div>
+      <div class="stanza-item">
+        <div>
+          <div class="tl-phase">第二节</div>
+          <div class="stanza-title">翅膀的诞生</div>
+          <div>
+            <span class="tag orange">梦想</span>
+            <span class="tag orange">利他</span>
+            <span class="tag orange">老树赠叶</span>
+            <span class="tag orange">翅膀</span>
+            <span class="tag orange">友情</span>
+          </div>
+        </div>
+        <div class="stanza-lines">
+          你想飞上月亮<br>折枝桂花给隔壁的小鸟<br>老树送你他的叶子<br>十个夜晚做成翅膀
+        </div>
+      </div>
+      <div class="stanza-item">
+        <div>
+          <div class="tl-phase">第三节</div>
+          <div class="stanza-title">飞翔与跌落</div>
+          <div>
+            <span class="tag red">飞翔</span>
+            <span class="tag red">失败</span>
+            <span class="tag red">跌落</span>
+            <span class="tag red">勇气</span>
+            <span class="tag red">转折</span>
+          </div>
+        </div>
+        <div class="stanza-lines">
+          站在树顶<br>展开翅膀<br>你飞呀<br>却跌落下来
+        </div>
+      </div>
+      <div class="stanza-item">
+        <div>
+          <div class="tl-phase">第四节</div>
+          <div class="stanza-title">月亮的秘密</div>
+          <div>
+            <span class="tag blue">想象力</span>
+            <span class="tag blue">童趣</span>
+            <span class="tag blue">月亮拟人</span>
+            <span class="tag blue">自我解嘲</span>
+            <span class="tag blue">收尾</span>
+          </div>
+        </div>
+        <div class="stanza-lines">
+          小鸟问你花在哪里<br>你说月亮是个小气鬼<br>她把自己变小<br>把花藏起来了
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 文学手法 -->
+<div id="section-literary" class="section">
+  <div class="card">
+    <h2><span class="icon">✍️</span>文学手法分析</h2>
+    <div class="lit-list">
+      <div class="lit-item">
+        <span class="lit-device">拟人</span>
+        <span class="lit-example">月亮是个小气鬼，把自己变小，把花藏起来了——月亮被赋予性格，使幻想世界更生动。</span>
+      </div>
+      <div class="lit-item">
+        <span class="lit-device">意象叠加</span>
+        <span class="lit-example">月亮·桂影·花香·老树·翅膀·小鸟构成完整奇幻世界，每个意象都承载情感。</span>
+      </div>
+      <div class="lit-item">
+        <span class="lit-device">第二人称叙述</span>
+        <span class="lit-example">全诗用"你"拉近读者距离，产生强烈代入感，读者即是主角。</span>
+      </div>
+      <div class="lit-item">
+        <span class="lit-device">时间压缩</span>
+        <span class="lit-example">"十个夜晚"一笔带过漫长等待，暗示坚持与耐心，却不拖沓。</span>
+      </div>
+      <div class="lit-item">
+        <span class="lit-device">反转结局</span>
+        <span class="lit-example">飞翔失败后用想象力重构现实，形成情感上的轻盈落地，将悲剧转化为温柔。</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  《羽》· 森林的孩子·故事诗 · 文本结构化分析 · 2026-03-22<br>
+  <small style="color:#484f58">自动生成 · 任务-20260322-0001</small>
+</footer>
+
+<script>
+function showTab(id, el) {
+  document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+  document.querySelectorAll('nav a').forEach(a => a.classList.remove('active'));
+  document.getElementById('section-' + id).classList.add('active');
+  el.classList.add('active');
+}
+</script>
+</body>
+</html>
