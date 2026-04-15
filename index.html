@@ -85,6 +85,8 @@ body{background:var(--bg);color:var(--text);font-family:"Microsoft YaHei","PingF
 .char-btn.hidden{display:none}
 .char-btn.highlight .char-word{color:var(--gold)!important}
 .char-btn.highlight{border-color:var(--gold)!important;box-shadow:0 0 16px rgba(249,213,110,0.3)}
+.no-result-msg{display:none;text-align:center;padding:48px 20px;font-size:15px;color:var(--text3);font-style:italic;letter-spacing:2px;line-height:2}
+.no-result-msg.show{display:block}
 
 .footer{
   text-align:center;padding:32px 16px;color:var(--text3);font-size:13px;
@@ -128,6 +130,7 @@ body{background:var(--bg);color:var(--text);font-family:"Microsoft YaHei","PingF
 <div class="river-container">
   <div class="river-title">&middot; 点击任意汉字，进入诗篇解析 &middot;</div>
   <div class="chars-grid" id="charsGrid"></div>
+  <div id="noResultMsg" class="no-result-msg">抱歉哦，写了这个字的叶子，还在悄悄地长，等等，等等看。</div>
 </div>
 
 <footer class="footer">
@@ -179,14 +182,23 @@ function renderGrid(data) {
 
 function filterPoems(query) {
   const q = query.trim();
+  let visibleCount = 0;
   document.querySelectorAll(".char-btn").forEach(btn => {
     const char = btn.dataset.char || "";
     const num = btn.dataset.num || "";
     const matchSearch = !q || char.includes(q) || num.includes(q);
     const matchFilter = currentFilter === "all" || btn.dataset.filter === currentFilter;
-    btn.classList.toggle("hidden", !matchSearch || !matchFilter);
+    const visible = matchSearch && matchFilter;
+    btn.classList.toggle("hidden", !visible);
     btn.classList.toggle("highlight", q.length > 0 && char.includes(q));
+    if (visible) visibleCount++;
   });
+  const noResultMsg = document.getElementById("noResultMsg");
+  if (q.length > 0 && visibleCount === 0) {
+    noResultMsg.classList.add("show");
+  } else {
+    noResultMsg.classList.remove("show");
+  }
 }
 
 function setFilter(filter, el) {
