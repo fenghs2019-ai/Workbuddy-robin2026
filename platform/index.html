@@ -27,6 +27,9 @@ body{background:var(--bg);color:var(--text);font-family:"Microsoft YaHei","PingF
   pointer-events:none;
 }
 .header-series{font-size:13px;letter-spacing:4px;color:var(--accent);text-transform:uppercase;margin-bottom:12px;}
+.back-home{position:absolute;top:16px;right:20px;display:flex;align-items:center;gap:6px;padding:8px 16px;background:rgba(82,194,118,0.15);border:1px solid rgba(82,194,118,0.3);border-radius:20px;color:var(--accent2);text-decoration:none;font-size:13px;transition:all 0.3s}
+.back-home:hover{background:rgba(82,194,118,0.25);border-color:var(--accent2);transform:translateX(-3px)}
+.back-home svg{width:14px;height:14px}
 .header-title{
   font-size:clamp(24px,5vw,42px);font-weight:900;
   background:linear-gradient(135deg,var(--gold),var(--accent2),var(--gold2));
@@ -105,6 +108,7 @@ body{background:var(--bg);color:var(--text);font-family:"Microsoft YaHei","PingF
 <body>
 
 <header class="header">
+  <a href="../index.html" style="position:absolute;top:16px;right:20px;background:rgba(82,194,118,0.15);border:1px solid rgba(82,194,118,0.3);color:var(--accent2);padding:6px 14px;border-radius:16px;font-size:13px;text-decoration:none;letter-spacing:1px;transition:all 0.2s;" onmouseover="this.style.background='rgba(82,194,118,0.3)';this.style.borderColor='var(--accent)'" onmouseout="this.style.background='rgba(82,194,118,0.15)';this.style.borderColor='rgba(82,194,118,0.3)'>&#8592; 返回首页</a>
   <div class="header-series">森林的孩子 &middot; 故事诗系列</div>
   <div class="header-title">爱（AI）解题叶渡诗河</div>
   <div class="header-subtitle">每一个字，都是一个故事</div>
@@ -155,6 +159,7 @@ const THEME_MAP = {
   "情感": "爱怜悲悦怒恕愁悟困伤默念忆思梦静暖伤",
   "人生": "路行渡流停望闯空真闲忙时光明年元凡城尘洲门镜舟匠聚钓诱香丝战波暖匠心逢网果香丝聚诱丝藏妖愿门镜湖丝颜倦封破等祈",
   "精神": "诗琴棋画歌舞幻术智舞",
+  "哲思": "桥守寻和智变真信义诺法",
   "成长": "试梯潜补息知懂变信义诺法赢累错惑病缘",
   "思念": "归远想忘别盼忆念想",
   "旅途": "跑游倦闯空闲离忙停行闯",
