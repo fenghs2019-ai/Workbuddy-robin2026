@@ -40,15 +40,17 @@ body{background:var(--bg);color:var(--text);font-family:"Microsoft YaHei","PingF
 .stat-num{font-size:32px;font-weight:900;color:var(--gold);font-variant-numeric:tabular-nums;}
 .stat-label{font-size:12px;color:var(--text3);letter-spacing:1px;margin-top:2px;}
 
+
 .toolbar{
-  display:flex;align-items:center;gap:12px;
-  padding:16px 24px;background:rgba(13,31,18,0.95);
-  border-bottom:1px solid rgba(82,194,118,0.1);flex-wrap:wrap;
+  display:flex;flex-direction:column;align-items:center;gap:16px;
+  padding:20px 24px;background:rgba(13,31,18,0.95);
+  border-bottom:1px solid rgba(82,194,118,0.1);
 }
+.search-row,.filter-row{display:flex;justify-content:center;width:100%;flex-wrap:wrap;gap:10px}
 .search-box{
   display:flex;align-items:center;gap:8px;
   background:var(--card);border:1px solid rgba(82,194,118,0.25);
-  border-radius:20px;padding:6px 16px;
+  border-radius:20px;padding:6px 16px;flex:0 0 auto;
 }
 .search-box input{background:none;border:none;outline:none;color:var(--text);font-size:14px;width:160px;}
 .search-box input::placeholder{color:var(--text3)}
@@ -115,16 +117,19 @@ body{background:var(--bg);color:var(--text);font-family:"Microsoft YaHei","PingF
 </header>
 
 <div class="toolbar">
-  <div class="search-box">
-    <span style="color:var(--text3)">&#128269;</span>
-    <input type="text" id="searchInput" placeholder="搜索诗字…" oninput="filterPoems(this.value)">
+  <div class="search-row">
+    <div class="search-box">
+      <span style="color:var(--text3)">&#128269;</span>
+      <input type="text" id="searchInput" placeholder="搜索诗字…" oninput="filterPoems(this.value)">
+    </div>
   </div>
-  <button class="filter-btn active" data-filter="all" onclick="setFilter('all',this)">全部</button>
-  <button class="filter-btn" data-filter="自然" onclick="setFilter('自然',this)">自然四季</button>
-  <button class="filter-btn" data-filter="动物" onclick="setFilter('动物',this)">森林生灵</button>
-  <button class="filter-btn" data-filter="情感" onclick="setFilter('情感',this)">情感心境</button>
-  <button class="filter-btn" data-filter="哲思" onclick="setFilter('哲思',this)">人生哲思</button>
-  <button class="filter-btn" data-filter="精神" onclick="setFilter('精神',this)">精神追求</button>
+  <div class="filter-row">
+    <button class="filter-btn" data-filter="自然" onclick="setFilter('自然',this)">自然四季</button>
+    <button class="filter-btn" data-filter="动物" onclick="setFilter('动物',this)">森林生灵</button>
+    <button class="filter-btn" data-filter="情感" onclick="setFilter('情感',this)">情感心境</button>
+    <button class="filter-btn" data-filter="哲思" onclick="setFilter('哲思',this)">人生哲思</button>
+    <button class="filter-btn" data-filter="精神" onclick="setFilter('精神',this)">精神追求</button>
+  </div>
 </div>
 
 <div class="river-container">
@@ -164,7 +169,7 @@ function getCharTheme(char) {
   return "";
 }
 
-let currentFilter = "all";
+let currentFilter = "";
 
 function renderGrid(data) {
   const grid = document.getElementById("charsGrid");
@@ -192,7 +197,7 @@ function filterPoems(query) {
     const char = btn.dataset.char || "";
     const num = btn.dataset.num || "";
     const matchSearch = !q || char.includes(q) || num.includes(q);
-    const matchFilter = currentFilter === "all" || btn.dataset.filter === currentFilter;
+    const matchFilter = currentFilter === "" || btn.dataset.filter === currentFilter;
     const visible = matchSearch && matchFilter;
     btn.classList.toggle("hidden", !visible);
     btn.classList.toggle("highlight", q.length > 0 && char.includes(q));
