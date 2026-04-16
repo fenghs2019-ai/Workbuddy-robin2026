@@ -333,9 +333,7 @@ function getUrlParam(name) {
   return params.get(name);
 }
 
-function goBack() {
-  window.location.href = 'index.html?t=' + Date.now();
-}
+function goBack(){window.location.replace('index.html?t='+Date.now())}
 
 function switchTab(tab) {
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
