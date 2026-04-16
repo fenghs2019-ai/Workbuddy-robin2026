@@ -149,8 +149,22 @@
     "stats": {
       "total_chars": 31,
       "line_count": 6,
-      "stanza_count": 1
+      "stanza_count": 2
     },
+    "chapters": [
+      {
+        "index": 1,
+        "title": "第1节",
+        "lines": ["鸟儿", "在空中飞过", "投下影子", "在我脸上"],
+        "text": "鸟儿\n在空中飞过\n投下影子\n在我脸上"
+      },
+      {
+        "index": 2,
+        "title": "第2节",
+        "lines": ["河水抚过脚趾", "清凉流进心底"],
+        "text": "河水抚过脚趾\n清凉流进心底"
+      }
+    ],
     "status": "completed"
   },
   "07": {
