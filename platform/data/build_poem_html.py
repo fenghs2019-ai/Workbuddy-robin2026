@@ -27,7 +27,8 @@ html = '''<!DOCTYPE html>
   --card:#1e3a24;--card2:#243d2a;
   --shadow:rgba(0,0,0,0.5);
 }
-body{background:var(--bg);color:var(--text);font-family:"Microsoft YaHei","PingFang SC",sans-serif;min-height:100vh;overflow-x:hidden}
+body{background:var(--bg);color:var(--text);font-family:"Microsoft YaHei","PingFang SC",sans-serif;min-height:100vh;overflow-x:visible;overflow-y:auto;-webkit-animation:fixlayout 0.001s}@-webkit-keyframes fixlayout{0%{opacity:0.99}100%{opacity:1}}
+window.onpageshow=function(e){if(e.persisted){location.replace(location.href+'&r='+Date.now())}};
 
 /* 顶部导航 */
 .top-nav{
