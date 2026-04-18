@@ -14,8 +14,7 @@
   --card:#1e3a24;--card2:#243d2a;
   --shadow:rgba(0,0,0,0.5);
 }
-body{background:var(--bg);color:var(--text);font-family:"Microsoft YaHei","PingFang SC",sans-serif;min-height:100vh;overflow-x:visible;overflow-y:auto;-webkit-animation:fixlayout 0.001s}@-webkit-keyframes fixlayout{0%{opacity:0.99}100%{opacity:1}}
-window.onpageshow=function(e){if(e.persisted){location.replace(location.href+'&r='+Date.now())}};
+body{background:var(--bg);color:var(--text);font-family:"Microsoft YaHei","PingFang SC",sans-serif;min-height:100vh;overflow-x:visible;overflow-y:auto;}
 
 /* 顶部导航 */
 .top-nav{
@@ -334,7 +333,10 @@ function getUrlParam(name) {
   return params.get(name);
 }
 
-function goBack(){window.location.replace('index.html?t='+Date.now())}
+function goBack(){
+  // 直接跳转，不带多余参数，让index.html的pageshow处理刷新
+  window.location.href = 'index.html';
+}
 
 function switchTab(tab) {
   document.querySelectorAll('.tab').forEach(t => t.classList.toggle('active', t.dataset.tab === tab));
@@ -580,6 +582,13 @@ function init() {
 }
 
 init();
+
+// bfcache：页面从缓存恢复时强制刷新
+window.addEventListener("pageshow", function(e) {
+  if (e.persisted) {
+    window.location.reload();
+  }
+});
 </script>
 </body>
 </html>

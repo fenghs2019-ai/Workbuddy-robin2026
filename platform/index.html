@@ -16,8 +16,7 @@
   --gold:#f9d56e;--gold2:#fbe599;
   --card:#1e3a24;--card2:#243d2a;
 }
-body{background:var(--bg);color:var(--text);font-family:"Microsoft YaHei","PingFang SC",sans-serif;min-height:100vh;overflow-x:visible;overflow-y:auto;-webkit-animation:fixlayout 0.001s}@-webkit-keyframes fixlayout{0%{opacity:0.99}100%{opacity:1}}
-window.onpageshow=function(e){if(e.persisted){location.replace(location.href+'&r='+Date.now())}};
+body{background:var(--bg);color:var(--text);font-family:"Microsoft YaHei","PingFang SC",sans-serif;min-height:100vh;overflow-x:visible;overflow-y:auto;}
 
 .header{
   background:linear-gradient(180deg,var(--bg2),var(--bg));
@@ -187,10 +186,11 @@ function renderGrid(data) {
     const char = p.char;
     // 优先用汉字匹配分类
     const category = getCharCategory(char);
-    const btn = document.createElement("a");
+    const btn = document.createElement("div");
     btn.className = "char-btn done";
-    btn.href = "poem.html?id=" + numStr;
-    btn.dataset.filter = category; // 使用分类值
+    btn.onclick = function(){ location.href = "poem.html?id=" + numStr; };
+    btn.style.cursor = "pointer";
+    btn.dataset.filter = category;
     btn.dataset.char = char;
     btn.dataset.num = p.num;
     btn.title = "No." + p.num + " " + char + (p.chars ? " · " + p.chars + "字" : "") + (category ? " · " + category : "");
@@ -231,6 +231,13 @@ function setFilter(filter, el) {
 renderGrid(NAV_DATA);
 const doneCount = Object.values(NAV_DATA).filter(p => p.status === "completed").length;
 document.getElementById("doneCount").textContent = doneCount;
+
+// bfcache：页面从缓存恢复时强制刷新，确保布局正确
+window.addEventListener("pageshow", function(e) {
+  if (e.persisted) {
+    window.location.reload();
+  }
+});
 </script>
 </body>
 </html>
