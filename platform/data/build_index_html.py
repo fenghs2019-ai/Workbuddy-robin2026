@@ -277,7 +277,7 @@ function renderGrid(data) {
     const tooltip = p.chars ? `No.${p.num} · ${p.chars}字 · ${theme||p.emotion||''}` : `No.${p.num}`;
     const btn = document.createElement('a');
     btn.className = 'char-btn done';
-    btn.href = `poem.html?id=${numStr}`;
+    btn.href = `./poem.html?id=${numStr}`;
     btn.dataset.filter = theme;
     btn.dataset.char = p.char;
     btn.dataset.num = p.num;
