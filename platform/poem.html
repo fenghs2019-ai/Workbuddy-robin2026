@@ -334,8 +334,8 @@ function getUrlParam(name) {
 }
 
 function goBack(){
-  // 直接跳转，不带多余参数，让index.html的pageshow处理刷新
-  window.location.href = 'index.html';
+  // 跳转到根目录的 index.html（稳定版）
+  window.location.href = '/index.html';
 }
 
 function switchTab(tab) {
