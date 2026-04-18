@@ -180,7 +180,7 @@ function renderGrid(data) {
     const theme = p.theme || getCharTheme(p.char) || "";
     const btn = document.createElement("a");
     btn.className = "char-btn done";
-    btn.href = "platform/poem.html?id=" + numStr;
+    btn.href = "./poem.html?id=" + numStr;
     btn.dataset.filter = theme;
     btn.dataset.char = p.char;
     btn.dataset.num = p.num;
